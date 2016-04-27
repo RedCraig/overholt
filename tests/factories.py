@@ -7,31 +7,29 @@
 """
 
 from datetime import datetime
-
-from factory import Factory, Sequence, LazyAttribute
+from factory import alchemy, LazyAttribute, Sequence, SubFactory
 from flask_security.utils import encrypt_password
 
-from overholt.core import db
 from overholt.models import *
 
 
-def create_sqlalchemy_model_function(class_to_create, *args, **kwargs):
-    entity = class_to_create(**kwargs)
-    db.session.add(entity)
-    db.session.commit()
-    return entity
-
-Factory.set_creation_function(create_sqlalchemy_model_function)
+class BaseFactory(alchemy.SQLAlchemyModelFactory):
+    class Meta:
+        abstract = True
 
 
-class RoleFactory(Factory):
-    FACTORY_FOR = Role
+class RoleFactory(BaseFactory):
+    class Meta:
+        model = Role
+
     name = 'admin'
     description = 'Administrator'
 
 
-class UserFactory(Factory):
-    FACTORY_FOR = User
+class UserFactory(BaseFactory):
+    class Meta:
+        model = User
+
     email = Sequence(lambda n: 'user{0}@overholt.com'.format(n))
     password = LazyAttribute(lambda a: encrypt_password('password'))
     last_login_at = datetime.utcnow()
@@ -39,12 +37,15 @@ class UserFactory(Factory):
     last_login_ip = '127.0.0.1'
     current_login_ip = '127.0.0.1'
     login_count = 1
-    roles = LazyAttribute(lambda _: [RoleFactory()])
+    # roles = SubFactory(RoleFactory)
+    # roles = LazyAttribute(lambda _: [RoleFactory()])
     active = True
 
 
-class StoreFactory(Factory):
-    FACTORY_FOR = Store
+class StoreFactory(BaseFactory):
+    class Meta:
+        model = Store
+
     name = Sequence(lambda n: 'Store Number {0}'.format(n))
     address = '123 Overholt Alley'
     city = 'Overholt'
@@ -52,11 +53,16 @@ class StoreFactory(Factory):
     zip_code = '12345'
 
 
-class ProductFactory(Factory):
-    FACTORY_FOR = Product
+class ProductFactory(BaseFactory):
+    class Meta:
+        model = Product
+
     name = Sequence(lambda n: 'Product Number {0}'.format(n))
 
 
-class CategoryFactory(Factory):
-    FACTORY_FOR = Category
+class CategoryFactory(alchemy.SQLAlchemyModelFactory):
+    class Meta:
+        model = Category
+        sqlalchemy_session = orm_session.Session
+
     name = Sequence(lambda n: 'Category {0}'.format(n))
