@@ -9,6 +9,7 @@
 from datetime import datetime
 from factory import alchemy, LazyAttribute, Sequence, SubFactory
 from flask_security.utils import encrypt_password
+from . import orm_session
 
 from overholt.models import *
 
@@ -16,6 +17,7 @@ from overholt.models import *
 class BaseFactory(alchemy.SQLAlchemyModelFactory):
     class Meta:
         abstract = True
+        sqlalchemy_session = orm_session.Session
 
 
 class RoleFactory(BaseFactory):
