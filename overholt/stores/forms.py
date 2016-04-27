@@ -6,22 +6,24 @@
     Store forms
 """
 
-from flask_wtf import Form, TextField, Required, Optional
+from flask_wtf import Form
+from wtforms import StringField, SelectMultipleField
+from wtforms.validators import DataRequired, Optional
 
 __all__ = ['NewStoreForm', 'UpdateStoreForm']
 
 
 class NewStoreForm(Form):
-    name = TextField('Name', validators=[Required()])
-    address = TextField('Address', validators=[Required()])
-    city = TextField('City', validators=[Required()])
-    state = TextField('State', validators=[Required()])
-    zip_code = TextField('Zip Code', validators=[Required()])
+    name = StringField('Name', validators=[DataRequired()])
+    address = StringField('Address', validators=[DataRequired()])
+    city = StringField('City', validators=[DataRequired()])
+    state = StringField('State', validators=[DataRequired()])
+    zip_code = StringField('Zip Code', validators=[DataRequired()])
 
 
 class UpdateStoreForm(Form):
-    name = TextField('Name', validators=[Optional()])
-    address = TextField('Address', validators=[Optional()])
-    city = TextField('City', validators=[Optional()])
-    state = TextField('State', validators=[Optional()])
-    zip_code = TextField('Zip Code', validators=[Optional()])
+    name = StringField('Name', validators=[Optional()])
+    address = StringField('Address', validators=[Optional()])
+    city = StringField('City', validators=[Optional()])
+    state = StringField('State', validators=[Optional()])
+    zip_code = StringField('Zip Code', validators=[Optional()])

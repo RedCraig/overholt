@@ -6,8 +6,9 @@
     Product forms
 """
 
-from flask_wtf import Form, TextField, SelectMultipleField, Required, \
-    Optional
+from flask_wtf import Form
+from wtforms import StringField, SelectMultipleField
+from wtforms.validators import DataRequired, Optional
 
 from ..services import products
 
@@ -22,12 +23,12 @@ class ProductFormMixin(object):
 
 
 class NewProductForm(ProductFormMixin, Form):
-    name = TextField('Name', validators=[Required()])
+    name = StringField('Name', validators=[DataRequired()])
     categories = SelectMultipleField(
-        'Categories', coerce=int, validators=[Required()])
+        'Categories', coerce=int, validators=[DataRequired()])
 
 
 class UpdateProductForm(ProductFormMixin, Form):
-    name = TextField('Name', validators=[Optional()])
+    name = StringField('Name', validators=[Optional()])
     categories = SelectMultipleField(
         'Categories', coerce=int, validators=[Optional()])
