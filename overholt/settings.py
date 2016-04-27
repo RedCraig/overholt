@@ -7,7 +7,7 @@
 """
 
 DEBUG = True
-SECRET_KEY = 'super-secret-key'
+SECRET_KEY = 'super-secret-key'.encode('utf8')
 
 SQLALCHEMY_DATABASE_URI = 'mysql://root@33.33.33.10:3306/overholt'
 CELERY_BROKER_URL = 'redis://33.33.33.10:6379/0'
